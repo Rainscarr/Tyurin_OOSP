@@ -10,11 +10,12 @@ import java.util.Map;
 public class LoginWindow extends JFrame {
     private Map<String, String> users = new HashMap<>(); // Хранение пользователей (логин - пароль)
     private Map<String, String> roles = new HashMap<>(); // Хранение ролей пользователей (логин - роль)
+    private static LoginWindow instance;
 
     private JTextField loginField;
     private JPasswordField passwordField;
 
-    public LoginWindow() {
+    private LoginWindow() {
         setTitle("Login");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(300, 150);
@@ -75,12 +76,19 @@ public class LoginWindow extends JFrame {
         registerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new RegistrationWindow(LoginWindow.this); // Передаем текущее окно для обновления данных о пользователе
+                new RoleSelectionWindow(LoginWindow.this); // Передаем текущее окно для обновления данных о пользователе
             }
         });
 
         setVisible(true);
 
+    }
+
+    public static LoginWindow getInstance() {
+        if (instance == null) {
+            instance = new LoginWindow();
+        }
+        return instance;
     }
 
     public void addUser(String login, String password, String role) {
@@ -112,7 +120,7 @@ public class LoginWindow extends JFrame {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                new LoginWindow();
+                LoginWindow.getInstance();
             }
         });
     }
